@@ -1,0 +1,104 @@
+[
+  {
+    "source": "solar_prices.json",
+    "name": "Solar Installation Cost",
+    "data_type": "money",
+    "source_url": "https://emp.lbl.gov/tracking-the-sun",
+    "description": "The average cost of installing solar panels over the last 10 years.",
+    "units": "$/KW"
+  },
+  {
+    "source": "co2_emissions.json",
+    "name": "CO2 Emissions",
+    "data_type": "number",
+    "source_url": "http://www.eia.gov/environment/emissions/state/analysis/",
+    "description": "Total carbon dioxide emissions from all sectors in million metric tons from 2017.",
+    "units": "mmt CO2"
+  },
+  {
+    "source": "percent_renewable.json",
+    "name": "Renewable Energy",
+    "data_type": "percent",
+    "source_url": "https://www.eia.gov/opendata/qb.php?category=40236",
+    "description": "Percent of energy consumption that was renewable in 2018."
+  },
+  {
+    "source": "national_parks.json",
+    "name": "National Parks",
+    "data_type": "number",
+    "source_url": "https://www.nps.gov/subjects/developer/index.htm",
+    "description": "Total number of national parks in the state."
+  },
+  {
+    "source": "income_tax.json",
+    "name": "Income Tax",
+    "data_type": "percent",
+    "source_url": "https://catalog.data.gov/dataset/choose-maryland-compare-states-taxes-0f1f5",
+    "description": "Personal income tax rate."
+  },
+  {
+    "source": "corporate_income_tax.json",
+    "name": "Corporate Income Tax",
+    "data_type": "percent",
+    "source_url": "https://catalog.data.gov/dataset/choose-maryland-compare-states-taxes-0f1f5",
+    "description": "Corporate income tax rate."
+  },
+  {
+    "source": "sales_tax.json",
+    "name": "Sales Tax",
+    "data_type": "percent",
+    "source_url": "https://catalog.data.gov/dataset/choose-maryland-compare-states-taxes-0f1f5",
+    "description": "Sales income tax rate."
+  },
+  {
+    "source": "unemployment.json",
+    "name": "Unemployment",
+    "data_type": "percent",
+    "source_url": "https://opendata.maryland.gov/Business-and-Economy/Choose-Maryland-Compare-States-Workforce/5esm-neyf",
+    "description": "Unemployment rate."
+  },
+  {
+    "source": "pop_change.json",
+    "name": "Population Change",
+    "data_type": "percent",
+    "source_url": "https://opendata.maryland.gov/Demographic/Choose-Maryland-Compare-States-Demographics/8mc4-hxm7",
+    "description": "Population change over one year."
+  },
+  {
+    "source": "median_age.json",
+    "name": "Median Age",
+    "data_type": "number",
+    "source_url": "https://opendata.maryland.gov/Demographic/Choose-Maryland-Compare-States-Demographics/8mc4-hxm7",
+    "description": "Median Age.",
+    "units": "years"
+  },
+  {
+    "source": "pop_density.json",
+    "name": "Population Density",
+    "data_type": "number",
+    "source_url": "https://opendata.maryland.gov/Demographic/Choose-Maryland-Compare-States-Demographics/8mc4-hxm7",
+    "description": "Population per square mile of land area.",
+    "units": "/mi^2"
+  },
+  {
+    "source": "median_household_income.json",
+    "name": "Median Household Income",
+    "data_type": "money",
+    "source_url": "https://opendata.maryland.gov/Demographic/Choose-Maryland-Compare-States-Demographics/8mc4-hxm7",
+    "description": "Median household income in 2018 inflation-adjusted dollars."
+  },
+  {
+    "source": "percapita_personal_income.json",
+    "name": "Per Capita Income",
+    "data_type": "money",
+    "source_url": "https://opendata.maryland.gov/Demographic/Choose-Maryland-Compare-States-Demographics/8mc4-hxm7",
+    "description": "Income received before the deduction of taxes."
+  },
+  {
+    "source": "poverty_rate.json",
+    "name": "Poverty Rate",
+    "data_type": "percent",
+    "source_url": "https://opendata.maryland.gov/Demographic/Choose-Maryland-Compare-States-Demographics/8mc4-hxm7",
+    "description": "Percent of people below the poverty level."
+  }
+]

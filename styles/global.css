@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-300 py-12;
+}
+
+.clickable:hover {
+  @apply bg-gray-300;
+  cursor: pointer;
+}
+
+.cell {
+  @apply px-4 py-2;
+}
+
+.sticky-column {
+  @apply sticky left-0 bg-white;
+}
