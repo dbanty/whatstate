@@ -34,14 +34,17 @@ interface ComparisonTableProps {
 }
 
 const ComparisonTable = (props: ComparisonTableProps) => (
-  <table className="table-auto">
+  <table className="table-auto overflow-auto shadow rounded bg-white w-full">
     <thead>
       <tr>
         <th
           className="cell sticky-column text-left"
           onClick={props.openSettings}
         >
-          <button className="clickable rounded border p-3 bg-gray-200">
+          <button
+            type="button"
+            className="clickable rounded border p-3 bg-gray-200"
+          >
             Settings
           </button>
         </th>
@@ -91,7 +94,7 @@ export default class App extends Component<null, AppState> {
         <Head>
           <title>What State Should I Live In?</title>
         </Head>
-        <div className="overflow-auto shadow rounded bg-white container mx-auto">
+        <div className="container mx-auto">
           <ComparisonTable
             states={this.state.selectedStates}
             openSettings={this.openSettings}
@@ -101,6 +104,16 @@ export default class App extends Component<null, AppState> {
             closeSettings={this.closeSettings}
             selectedStates={this.state.selectedStates}
           />
+          <div id="footer" className="flex flex-row-reverse">
+            <a
+              href="https://github.com/dbanty/whatstate"
+              className="p-2 underline"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              Contact Us
+            </a>
+          </div>
         </div>
       </>
     );
