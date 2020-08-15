@@ -102,6 +102,10 @@ export default class App extends Component<null, AppState> {
       <>
         <Head>
           <title>What State Should I Live In?</title>
+          <meta
+            name="description"
+            content="Compare US States and decide where to move."
+          />
         </Head>
         <div className="container mx-auto">
           <ComparisonTable
