@@ -34,27 +34,29 @@ interface ComparisonTableProps {
 }
 
 const ComparisonTable = (props: ComparisonTableProps) => (
-  <table className="table-auto overflow-auto shadow rounded bg-white w-full">
-    <thead>
-      <tr>
-        <th
-          className="cell sticky-column text-left"
-          onClick={props.openSettings}
-        >
-          <button
-            type="button"
-            className="clickable rounded border p-3 bg-gray-200"
+  <div className="overflow-auto shadow rounded bg-white w-full">
+    <table className="table-auto">
+      <thead>
+        <tr>
+          <th
+            className="cell sticky-column text-left"
+            onClick={props.openSettings}
           >
-            Settings
-          </button>
-        </th>
-        <States states={props.states} />
-      </tr>
-    </thead>
-    <tbody>
-      <AttributeList states={props.states} sources={getDataSources()} />
-    </tbody>
-  </table>
+            <button
+              type="button"
+              className="clickable rounded border p-2 bg-gray-200"
+            >
+              Change Data
+            </button>
+          </th>
+          <States states={props.states} />
+        </tr>
+      </thead>
+      <tbody>
+        <AttributeList states={props.states} sources={getDataSources()} />
+      </tbody>
+    </table>
+  </div>
 );
 
 interface AppState {
