@@ -1,36 +1,23 @@
 import React, { Component } from "react";
 import Head from "next/head";
 import { DataSource, getDataSources } from "../data/data_sources";
-import Attribute from "../components/attribute";
 import Settings from "../components/settings";
+import SourceDetails from "../components/source_details";
+import AttributeList from "../components/attribute_list";
 
 const States = (props: { states: string[] }) => {
   const headers = props.states.map((state) => (
-    <th className="cell" key={state}>
+    <th className="cell border-b" key={state}>
       {state}
     </th>
   ));
   return <>{headers}</>;
 };
 
-interface AttrListProps {
-  states: string[];
-  sources: DataSource[];
-}
-
-const AttributeList = (props: AttrListProps) => {
-  const rows = props.sources.map((source) => (
-    <tr key={source.name}>
-      <th className="cell sticky-column text-left">{source.name}</th>
-      <Attribute states={props.states} source={source} />
-    </tr>
-  ));
-  return <>{rows}</>;
-};
-
 interface ComparisonTableProps {
   states: string[];
   openSettings: () => void;
+  openDetails: (source: DataSource) => void;
 }
 
 const ComparisonTable = (props: ComparisonTableProps) => (
@@ -53,7 +40,11 @@ const ComparisonTable = (props: ComparisonTableProps) => (
         </tr>
       </thead>
       <tbody>
-        <AttributeList states={props.states} sources={getDataSources()} />
+        <AttributeList
+          states={props.states}
+          sources={getDataSources()}
+          openDetails={props.openDetails}
+        />
       </tbody>
     </table>
   </div>
@@ -63,6 +54,7 @@ interface AppState {
   selectedStates: string[];
   selectedAttributes: DataSource[];
   settingsOpen: boolean;
+  selectedSource: DataSource | null;
 }
 
 export default class App extends Component<null, AppState> {
@@ -72,6 +64,7 @@ export default class App extends Component<null, AppState> {
       selectedStates: [],
       selectedAttributes: [],
       settingsOpen: false,
+      selectedSource: null,
     };
   }
 
@@ -90,6 +83,20 @@ export default class App extends Component<null, AppState> {
     }));
   };
 
+  openDetails = (source: DataSource): void => {
+    this.setState((previousState) => ({
+      ...previousState,
+      selectedSource: source,
+    }));
+  };
+
+  closeDetails = (): void => {
+    this.setState((previousState) => ({
+      ...previousState,
+      selectedSource: null,
+    }));
+  };
+
   render(): JSX.Element {
     return (
       <>
@@ -100,11 +107,16 @@ export default class App extends Component<null, AppState> {
           <ComparisonTable
             states={this.state.selectedStates}
             openSettings={this.openSettings}
+            openDetails={this.openDetails}
           />
           <Settings
             open={this.state.settingsOpen}
             closeSettings={this.closeSettings}
             selectedStates={this.state.selectedStates}
+          />
+          <SourceDetails
+            source={this.state.selectedSource}
+            closeDetails={this.closeDetails}
           />
           <div id="footer" className="flex flex-row-reverse">
             <a

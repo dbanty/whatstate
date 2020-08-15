@@ -1,5 +1,8 @@
+/*noinspection CssInvalidAtRule*/
 @tailwind base;
+/*noinspection CssInvalidAtRule*/
 @tailwind components;
+/*noinspection CssInvalidAtRule*/
 @tailwind utilities;
 
 body {
@@ -17,4 +20,14 @@ body {
 
 .sticky-column {
   @apply sticky left-0 bg-white;
+}
+
+/*noinspection CssInvalidFunction*/
+.icon-primary {
+  fill: theme('colors.gray.200');
+}
+
+/*noinspection CssInvalidFunction*/
+.icon-secondary {
+  fill: theme('colors.gray.600');
 }
