@@ -5,6 +5,8 @@ import Settings from "../components/settings";
 import SourceDetails from "../components/source_details";
 import AttributeList from "../components/attribute_list";
 
+const SELECTED_STATES = "SELECTED_STATES";
+
 const States = (props: { states: string[] }) => {
   const headers = props.states.map((state) => (
     <th className="cell border-b" key={state}>
@@ -57,6 +59,15 @@ interface AppState {
   selectedSource: DataSource | null;
 }
 
+function loadStates(): string[] {
+  const storedValue = localStorage.getItem(SELECTED_STATES);
+  if (!storedValue) {
+    return ["CO", "WA", "VA", "PA"];
+  }
+  return JSON.parse(storedValue);
+}
+
+// noinspection JSUnusedGlobalSymbols
 export default class App extends Component<null, AppState> {
   constructor(props: null) {
     super(props);
@@ -68,6 +79,13 @@ export default class App extends Component<null, AppState> {
     };
   }
 
+  componentDidMount(): void {
+    this.setState((previous) => ({
+      ...previous,
+      selectedStates: loadStates(),
+    }));
+  }
+
   openSettings = (): void => {
     this.setState((previousState) => ({
       ...previousState,
@@ -75,10 +93,30 @@ export default class App extends Component<null, AppState> {
     }));
   };
 
-  closeSettings = (newStates: string[]): void => {
+  updateStates = (selectedStates: string[]): void => {
+    this.setState((current) => {
+      localStorage.setItem(SELECTED_STATES, JSON.stringify(selectedStates));
+      return {
+        ...current,
+        selectedStates,
+      };
+    });
+  };
+
+  addState = (newState: string): void => {
+    const selectedStates = [...this.state.selectedStates, newState];
+    this.updateStates(selectedStates);
+  };
+
+  removeState = (index: number): void => {
+    const newStates = [...this.state.selectedStates];
+    newStates.splice(index, 1);
+    this.updateStates(newStates);
+  };
+
+  closeSettings = (): void => {
     this.setState((previousState) => ({
       ...previousState,
-      selectedStates: newStates,
       settingsOpen: false,
     }));
   };
@@ -117,6 +155,8 @@ export default class App extends Component<null, AppState> {
             open={this.state.settingsOpen}
             closeSettings={this.closeSettings}
             selectedStates={this.state.selectedStates}
+            addState={this.addState}
+            removeState={this.removeState}
           />
           <SourceDetails
             source={this.state.selectedSource}
