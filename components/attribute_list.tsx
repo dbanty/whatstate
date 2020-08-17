@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { DataSource } from "../data/data_sources";
 import Attribute from "./attribute";
 
@@ -25,7 +25,7 @@ const INFO_ICON = (
   </svg>
 );
 
-export default function AttributeList(props: AttrListProps): JSX.Element {
+function AttributeList(props: AttrListProps): JSX.Element {
   const rows = props.sources.map((source) => (
     <tr key={source.name}>
       <th className="cell sticky-column text-left border-r">
@@ -44,3 +44,5 @@ export default function AttributeList(props: AttrListProps): JSX.Element {
   ));
   return <>{rows}</>;
 }
+
+export default React.memo(AttributeList);

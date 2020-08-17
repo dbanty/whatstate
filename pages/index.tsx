@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import { DataSource, getDataSources } from "../data/data_sources";
 import Settings from "../components/settings";
@@ -52,13 +52,6 @@ const ComparisonTable = (props: ComparisonTableProps) => (
   </div>
 );
 
-interface AppState {
-  selectedStates: string[];
-  selectedAttributes: DataSource[];
-  settingsOpen: boolean;
-  selectedSource: DataSource | null;
-}
-
 function loadStates(): string[] {
   const storedValue = localStorage.getItem(SELECTED_STATES);
   if (!storedValue) {
@@ -68,112 +61,80 @@ function loadStates(): string[] {
 }
 
 // noinspection JSUnusedGlobalSymbols
-export default class App extends Component<null, AppState> {
-  constructor(props: null) {
-    super(props);
-    this.state = {
-      selectedStates: [],
-      selectedAttributes: [],
-      settingsOpen: false,
-      selectedSource: null,
-    };
-  }
+export default function App(): JSX.Element {
+  const [selectedStates, setSelectedStates] = useState<string[]>([]);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [selectedSource, setSelectedSource] = useState<DataSource | null>(null);
 
-  componentDidMount(): void {
-    this.setState((previous) => ({
-      ...previous,
-      selectedStates: loadStates(),
-    }));
-  }
+  useEffect(() => {
+    setSelectedStates(loadStates());
+  }, []);
 
-  openSettings = (): void => {
-    this.setState((previousState) => ({
-      ...previousState,
-      settingsOpen: true,
-    }));
+  const openSettings = (): void => {
+    setSettingsOpen(true);
   };
 
-  updateStates = (selectedStates: string[]): void => {
-    this.setState((current) => {
-      localStorage.setItem(SELECTED_STATES, JSON.stringify(selectedStates));
-      return {
-        ...current,
-        selectedStates,
-      };
-    });
+  const updateStates = (newStates: string[]): void => {
+    localStorage.setItem(SELECTED_STATES, JSON.stringify(newStates));
+    setSelectedStates(newStates);
   };
 
-  addState = (newState: string): void => {
-    const selectedStates = [...this.state.selectedStates, newState];
-    this.updateStates(selectedStates);
+  const addState = (newState: string): void => {
+    updateStates([...selectedStates, newState]);
   };
 
-  removeState = (index: number): void => {
-    const newStates = [...this.state.selectedStates];
+  const removeState = (index: number): void => {
+    const newStates = [...selectedStates];
     newStates.splice(index, 1);
-    this.updateStates(newStates);
+    updateStates(newStates);
   };
 
-  closeSettings = (): void => {
-    this.setState((previousState) => ({
-      ...previousState,
-      settingsOpen: false,
-    }));
+  const closeSettings = (): void => {
+    setSettingsOpen(false);
   };
 
-  openDetails = (source: DataSource): void => {
-    this.setState((previousState) => ({
-      ...previousState,
-      selectedSource: source,
-    }));
+  const openDetails = (source: DataSource): void => {
+    setSelectedSource(source);
   };
 
-  closeDetails = (): void => {
-    this.setState((previousState) => ({
-      ...previousState,
-      selectedSource: null,
-    }));
+  const closeDetails = (): void => {
+    setSelectedSource(null);
   };
 
-  render(): JSX.Element {
-    return (
-      <>
-        <Head>
-          <title>What State Should I Live In?</title>
-          <meta
-            name="description"
-            content="Compare US States and decide where to move."
-          />
-        </Head>
-        <div className="container mx-auto">
-          <ComparisonTable
-            states={this.state.selectedStates}
-            openSettings={this.openSettings}
-            openDetails={this.openDetails}
-          />
-          <Settings
-            open={this.state.settingsOpen}
-            closeSettings={this.closeSettings}
-            selectedStates={this.state.selectedStates}
-            addState={this.addState}
-            removeState={this.removeState}
-          />
-          <SourceDetails
-            source={this.state.selectedSource}
-            closeDetails={this.closeDetails}
-          />
-          <div id="footer" className="flex flex-row-reverse">
-            <a
-              href="https://github.com/dbanty/whatstate"
-              className="p-2 underline"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              Contact Us
-            </a>
-          </div>
+  return (
+    <>
+      <Head>
+        <title>What State Should I Live In?</title>
+        <meta
+          name="description"
+          content="Compare US States and decide where to move."
+        />
+      </Head>
+      <div className="container mx-auto">
+        <ComparisonTable
+          states={selectedStates}
+          openSettings={openSettings}
+          openDetails={openDetails}
+        />
+        <Settings
+          open={settingsOpen}
+          closeSettings={closeSettings}
+          selectedStates={selectedStates}
+          addState={addState}
+          removeState={removeState}
+        />
+        <SourceDetails source={selectedSource} closeDetails={closeDetails} />
+        <div id="footer" className="flex flex-row-reverse">
+          <a
+            href="https://github.com/dbanty/whatstate"
+            className="p-2 underline"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            Contact Us
+          </a>
         </div>
-      </>
-    );
-  }
+      </div>
+    </>
+  );
 }
