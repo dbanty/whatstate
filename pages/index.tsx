@@ -9,9 +9,9 @@ const SELECTED_STATES = "SELECTED_STATES";
 
 const States = (props: { states: string[] }) => {
   const headers = props.states.map((state) => (
-    <th className="cell border-b" key={state}>
+    <div className="table-cell cell border-b text-center" key={state}>
       {state}
-    </th>
+    </div>
   ));
   return <>{headers}</>;
 };
@@ -23,32 +23,30 @@ interface ComparisonTableProps {
 }
 
 const ComparisonTable = (props: ComparisonTableProps) => (
-  <div className="overflow-auto shadow rounded bg-white w-full">
-    <table className="table-auto">
-      <thead>
-        <tr>
-          <th
-            className="cell sticky-column text-left"
-            onClick={props.openSettings}
-          >
+  <div className="table-container">
+    <div className="table shadow rounded bg-white w-full">
+      <div className="table-header-group overflow-scroll">
+        <div className="table-row sticky top-0 bg-white z-10">
+          <div className="table-cell cell sticky-column bg-white z-20">
             <button
               type="button"
               className="clickable rounded border p-2 bg-gray-200"
+              onClick={props.openSettings}
             >
               Change Data
             </button>
-          </th>
+          </div>
           <States states={props.states} />
-        </tr>
-      </thead>
-      <tbody>
+        </div>
+      </div>
+      <div className="table-row-group overflow-scroll bg-white">
         <AttributeList
           states={props.states}
           sources={getDataSources()}
           openDetails={props.openDetails}
         />
-      </tbody>
-    </table>
+      </div>
+    </div>
   </div>
 );
 
@@ -60,8 +58,7 @@ function loadStates(): string[] {
   return JSON.parse(storedValue);
 }
 
-// noinspection JSUnusedGlobalSymbols
-export default function App(): JSX.Element {
+const App: React.FC = () => {
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [selectedSource, setSelectedSource] = useState<DataSource | null>(null);
@@ -110,7 +107,7 @@ export default function App(): JSX.Element {
           content="Compare US States and decide where to move."
         />
       </Head>
-      <div className="container mx-auto">
+      <div className="container m-auto">
         <ComparisonTable
           states={selectedStates}
           openSettings={openSettings}
@@ -124,7 +121,7 @@ export default function App(): JSX.Element {
           removeState={removeState}
         />
         <SourceDetails source={selectedSource} closeDetails={closeDetails} />
-        <div id="footer" className="flex flex-row-reverse">
+        <div id="footer" className="flex flex-row-reverse h-10">
           <a
             href="https://github.com/dbanty/whatstate"
             className="p-2 underline"
@@ -137,4 +134,6 @@ export default function App(): JSX.Element {
       </div>
     </>
   );
-}
+};
+
+export default App;

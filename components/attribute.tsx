@@ -46,9 +46,9 @@ export default function Attribute(props: AttrProps): JSX.Element | null {
     const value = data[state];
     const valueString = format(value);
     return (
-      <td className="cell text-right" key={state}>
+      <div className="table-cell text-right" key={state}>
         {valueString}
-      </td>
+      </div>
     );
   });
   return <>{cols}</>;

@@ -6,7 +6,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gray-300 py-12;
+  @apply bg-gray-300;
 }
 
 .clickable:hover {
@@ -14,8 +14,24 @@ body {
   cursor: pointer;
 }
 
-.cell {
+.table-cell {
   @apply px-4 py-2;
+}
+
+.container {
+  height: 100vh;
+}
+
+@screen md {
+  .container {
+    @apply mt-12;
+    height: calc(100vh - 3rem);
+  }
+}
+
+.table-container {
+  overflow: scroll;
+  height: calc(100% - 2.5rem);
 }
 
 .sticky-column {
