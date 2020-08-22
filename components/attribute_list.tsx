@@ -26,7 +26,7 @@ const INFO_ICON = (
 function AttributeList(props: AttrListProps): JSX.Element {
   const rows = props.sources.map((source) => (
     <div className="table-row" key={source.name}>
-      <div className="table-cell sticky-column border-r">
+      <div className="table-cell sticky-column border-r max-w-8">
         <button
           type="button"
           className="inline-flex items-center justify-between text-gray-700 w-full"

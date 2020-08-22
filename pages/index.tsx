@@ -1,54 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import { DataSource, getDataSources } from "../data/data_sources";
+import { ALL_SOURCES, DataSource } from "../data/data_sources";
 import Settings from "../components/settings";
 import SourceDetails from "../components/source_details";
-import AttributeList from "../components/attribute_list";
+import ComparisonTable from "../components/comparison_table";
 
 const SELECTED_STATES = "SELECTED_STATES";
-
-const States = (props: { states: string[] }) => {
-  const headers = props.states.map((state) => (
-    <div className="table-cell cell border-b text-center" key={state}>
-      {state}
-    </div>
-  ));
-  return <>{headers}</>;
-};
-
-interface ComparisonTableProps {
-  states: string[];
-  openSettings: () => void;
-  openDetails: (source: DataSource) => void;
-}
-
-const ComparisonTable = (props: ComparisonTableProps) => (
-  <div className="table-container">
-    <div className="table shadow rounded bg-white w-full">
-      <div className="table-header-group overflow-scroll">
-        <div className="table-row sticky top-0 bg-white z-10">
-          <div className="table-cell cell sticky-column bg-white z-20">
-            <button
-              type="button"
-              className="clickable rounded border p-2 bg-gray-200"
-              onClick={props.openSettings}
-            >
-              Change Data
-            </button>
-          </div>
-          <States states={props.states} />
-        </div>
-      </div>
-      <div className="table-row-group overflow-scroll bg-white">
-        <AttributeList
-          states={props.states}
-          sources={getDataSources()}
-          openDetails={props.openDetails}
-        />
-      </div>
-    </div>
-  </div>
-);
+const SELECTED_SOURCES = "SELECTED_SOURCES";
 
 function loadStates(): string[] {
   const storedValue = localStorage.getItem(SELECTED_STATES);
@@ -58,13 +16,33 @@ function loadStates(): string[] {
   return JSON.parse(storedValue);
 }
 
+function loadSources(): DataSource[] {
+  const storedValue = localStorage.getItem(SELECTED_SOURCES);
+  const sources: string[] = (storedValue && JSON.parse(storedValue)) ?? [
+    "income_tax.json",
+    "national_parks.json",
+    "percaptia_personal_income.json",
+    "percent_renewable.json",
+    "pop_density.json",
+  ];
+  const dataSources: DataSource[] = [];
+  ALL_SOURCES.forEach((source) => {
+    if (sources.includes(source.source)) {
+      dataSources.push(source);
+    }
+  });
+  return dataSources;
+}
+
 const App: React.FC = () => {
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
+  const [selectedSources, setSelectedSources] = useState<DataSource[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [selectedSource, setSelectedSource] = useState<DataSource | null>(null);
 
   useEffect(() => {
     setSelectedStates(loadStates());
+    setSelectedSources(loadSources());
   }, []);
 
   const openSettings = (): void => {
@@ -84,6 +62,24 @@ const App: React.FC = () => {
     const newStates = [...selectedStates];
     newStates.splice(index, 1);
     updateStates(newStates);
+  };
+
+  const updateSources = (newSources: DataSource[]): void => {
+    localStorage.setItem(
+      SELECTED_SOURCES,
+      JSON.stringify(newSources.map((source) => source.source))
+    );
+    setSelectedSources(newSources);
+  };
+
+  const addSource = (newSource: DataSource): void => {
+    updateSources([...selectedSources, newSource]);
+  };
+
+  const removeSource = (index: number): void => {
+    const newSources = [...selectedSources];
+    newSources.splice(index, 1);
+    updateSources(newSources);
   };
 
   const closeSettings = (): void => {
@@ -107,21 +103,25 @@ const App: React.FC = () => {
           content="Compare US States and decide where to move."
         />
       </Head>
-      <div className="container m-auto">
+      <div className="container m-auto flex flex-col items-center">
         <ComparisonTable
           states={selectedStates}
+          sources={selectedSources}
           openSettings={openSettings}
           openDetails={openDetails}
         />
         <Settings
           open={settingsOpen}
-          closeSettings={closeSettings}
+          close={closeSettings}
           selectedStates={selectedStates}
           addState={addState}
           removeState={removeState}
+          selectedSources={selectedSources}
+          addSource={addSource}
+          removeSource={removeSource}
         />
         <SourceDetails source={selectedSource} closeDetails={closeDetails} />
-        <div id="footer" className="flex flex-row-reverse h-10">
+        <div id="footer" className="flex flex-row-reverse h-10 w-full">
           <a
             href="https://github.com/dbanty/whatstate"
             className="p-2 underline"

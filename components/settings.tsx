@@ -1,13 +1,28 @@
 import React from "react";
 import InputTag from "./input_tag";
+import { STATES } from "../data/states";
+import { DataSource, ALL_SOURCES } from "../data/data_sources";
 
 interface SettingsProps {
   open: boolean;
+  close: () => void;
   selectedStates: string[];
-  closeSettings: () => void;
   addState: (state: string) => void;
   removeState: (index: number) => void;
+  selectedSources: DataSource[];
+  addSource: (source: DataSource) => void;
+  removeSource: (index: number) => void;
 }
+
+interface State {
+  code: string;
+  name: string;
+}
+
+const ALL_STATES: State[] = Object.entries(STATES).map(([code, name]) => ({
+  code,
+  name,
+}));
 
 /**
  * The settings dialog.
@@ -34,12 +49,30 @@ export default function Settings(props: SettingsProps): JSX.Element | null {
                 className="text-lg leading-6 font-medium text-gray-900 pb-4"
                 id="modal-headline"
               >
-                Select States
+                Settings
               </h3>
-              <InputTag
-                values={props.selectedStates}
-                addValue={props.addState}
+              <InputTag<State>
+                selectedValues={props.selectedStates.map((code) => ({
+                  code,
+                  name: STATES[code],
+                }))}
+                allValues={ALL_STATES}
+                addValue={(state) => props.addState(state.code)}
                 removeValue={props.removeState}
+                placeholder="Select a new State"
+                getChipLabel={(state) => state.code}
+                getKey={(state) => state.code}
+                getSearchLabel={(state) => `${state.name} (${state.code})`}
+              />
+              <InputTag<DataSource>
+                selectedValues={props.selectedSources}
+                allValues={ALL_SOURCES}
+                addValue={props.addSource}
+                removeValue={props.removeSource}
+                placeholder="Select more data"
+                getChipLabel={(source) => source.name}
+                getSearchLabel={(source) => source.name}
+                getKey={(source) => source.source}
               />
             </div>
           </div>
@@ -49,7 +82,7 @@ export default function Settings(props: SettingsProps): JSX.Element | null {
             <button
               type="button"
               className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-red-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-              onClick={props.closeSettings}
+              onClick={props.close}
             >
               Save
             </button>

@@ -1,40 +1,58 @@
 import React, { useState } from "react";
-import { STATES } from "../data/states";
 
-interface InputTagProps {
-  values: string[];
-  addValue: (value: string) => void;
+interface InputTagProps<T> {
+  selectedValues: T[];
+  allValues: T[];
+  getChipLabel: (value: T) => string;
+  getSearchLabel: (value: T) => string;
+  getKey: (value: T) => string;
+  addValue: (value: T) => void;
   removeValue: (index: number) => void;
+  placeholder: string;
 }
-
-const ALL_STATES = Object.entries(STATES).map(([code, name]) => ({
-  code,
-  name,
-}));
 
 /**
  * Contains a text input field which creates tags. Calls out to an update function each time
  * a tag is added or removed.
  */
-export default function InputTag(props: InputTagProps): JSX.Element | null {
+export default function InputTag<T>(
+  props: InputTagProps<T>
+): JSX.Element | null {
   const [showCompletion, setShowCompletion] = useState(false);
   const [inputText, setInputText] = useState("");
 
   const lowerInputText = inputText.toLocaleLowerCase();
-  const filteredStates = ALL_STATES.filter(
-    (state) =>
-      !props.values.includes(state.code) &&
-      (!lowerInputText ||
-        state.code.toLocaleLowerCase().includes(lowerInputText) ||
-        state.name.toLocaleLowerCase().includes(lowerInputText))
-  );
+  const filteredValues = props.allValues
+    .filter(
+      (value) =>
+        !props.selectedValues.includes(value) &&
+        (!lowerInputText ||
+          props
+            .getSearchLabel(value)
+            .toLocaleLowerCase()
+            .includes(lowerInputText))
+    )
+    .sort((first, second): number => {
+      const firstLabel = props.getSearchLabel(first);
+      const secondLabel = props.getSearchLabel(second);
+      if (!lowerInputText) return firstLabel.localeCompare(secondLabel);
+      if (firstLabel.startsWith(lowerInputText)) {
+        return -1;
+      }
+      if (secondLabel.startsWith(lowerInputText)) {
+        return 1;
+      }
+      return (
+        firstLabel.indexOf(lowerInputText) - secondLabel.indexOf(lowerInputText)
+      );
+    });
 
   const inputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { value } = e.target;
     setInputText(value);
   };
 
-  const addValue = (value: string): void => {
+  const addValue = (value: T): void => {
     props.addValue(value);
     setInputText("");
   };
@@ -43,10 +61,11 @@ export default function InputTag(props: InputTagProps): JSX.Element | null {
     if (e.key !== "Enter") {
       return;
     }
-    if (filteredStates.length === 0) {
-      alert("Invalid state!");
+    if (filteredValues.length === 0) {
+      // eslint-disable-next-line no-alert
+      alert("Invalid value!");
     } else {
-      addValue(filteredStates[0].code);
+      addValue(filteredValues[0]);
     }
   };
 
@@ -54,16 +73,16 @@ export default function InputTag(props: InputTagProps): JSX.Element | null {
   if (showCompletion) {
     autocomplete = (
       <div className="h-40 overflow-auto shadow p-3 rounded">
-        {filteredStates.map((state) => {
+        {filteredValues.map((value) => {
           return (
             <button
               type="submit"
               style={{ cursor: "pointer" }}
-              onMouseDown={() => addValue(state.code)}
-              key={state.code}
+              onMouseDown={() => addValue(value)}
+              key={props.getKey(value)}
               className="block"
             >
-              {state.name} ({state.code})
+              {props.getSearchLabel(value)}
             </button>
           );
         })}
@@ -76,21 +95,24 @@ export default function InputTag(props: InputTagProps): JSX.Element | null {
   return (
     <div className="flex flex-col">
       <ul>
-        {props.values.map((value, i) => (
-          <li
-            key={value}
-            className="border rounded-full w-auto inline-block m-1 py-1 px-3"
-          >
-            {value}
-            <button
-              type="button"
-              className="ml-4"
-              onClick={() => props.removeValue(i)}
+        {props.selectedValues.map((value, i) => {
+          const chipLabel = props.getChipLabel(value);
+          return (
+            <li
+              key={chipLabel}
+              className="border rounded-full w-auto inline-block m-1 py-1 px-3"
             >
-              x
-            </button>
-          </li>
-        ))}
+              {chipLabel}
+              <button
+                type="button"
+                className="ml-4"
+                onClick={() => props.removeValue(i)}
+              >
+                x
+              </button>
+            </li>
+          );
+        })}
       </ul>
       <input
         type="text"
@@ -99,7 +121,7 @@ export default function InputTag(props: InputTagProps): JSX.Element | null {
         onFocus={() => setShowCompletion(true)}
         onBlur={() => setShowCompletion(false)}
         value={inputText}
-        placeholder="Enter new state"
+        placeholder={props.placeholder}
         className="bg-gray-200 w-40 mt-2 rounded p-1"
       />
       {autocomplete}

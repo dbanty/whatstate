@@ -17,9 +17,7 @@ export interface DataSource {
   units?: string;
 }
 
-export function getDataSources(): DataSource[] {
-  return sources as DataSource[];
-}
+export const ALL_SOURCES = sources as DataSource[];
 
 export function loadDataSource(
   source: string
