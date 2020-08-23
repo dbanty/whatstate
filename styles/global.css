@@ -41,10 +41,10 @@ body {
 
 /*noinspection CssInvalidFunction*/
 .icon-primary {
-  fill: theme('colors.gray.200');
+  fill: theme("colors.gray.200");
 }
 
 /*noinspection CssInvalidFunction*/
 .icon-secondary {
-  fill: theme('colors.gray.600');
+  fill: theme("colors.gray.600");
 }

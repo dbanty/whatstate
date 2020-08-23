@@ -100,5 +100,45 @@
     "data_type": "percent",
     "source_url": "https://opendata.maryland.gov/Demographic/Choose-Maryland-Compare-States-Demographics/8mc4-hxm7",
     "description": "Percent of people below the poverty level."
+  },
+  {
+    "source": "annual_temp.json",
+    "name": "Average Temperature",
+    "data_type": "number",
+    "units": "ºF",
+    "source_url": "https://www.ncdc.noaa.gov/cdo-web/datasets",
+    "description": "Long-term averages of annual average temperature from 1981 to 2010."
+  },
+  {
+    "source": "autumn_temp.json",
+    "name": "Average Autumn Temperature",
+    "data_type": "number",
+    "units": "ºF",
+    "source_url": "https://www.ncdc.noaa.gov/cdo-web/datasets",
+    "description": "Long-term averages of autumn average temperature from 1981 to 2010."
+  },
+  {
+    "source": "spring_temp.json",
+    "name": "Average Spring Temperature",
+    "data_type": "number",
+    "units": "ºF",
+    "source_url": "https://www.ncdc.noaa.gov/cdo-web/datasets",
+    "description": "Long-term averages of spring average temperature from 1981 to 2010."
+  },
+  {
+    "source": "summer_temp.json",
+    "name": "Average Summer Temperature",
+    "data_type": "number",
+    "units": "ºF",
+    "source_url": "https://www.ncdc.noaa.gov/cdo-web/datasets",
+    "description": "Long-term averages of summer average temperature from 1981 to 2010."
+  },
+  {
+    "source": "winter_temp.json",
+    "name": "Average Winter Temperature",
+    "data_type": "number",
+    "units": "ºF",
+    "source_url": "https://www.ncdc.noaa.gov/cdo-web/datasets",
+    "description": "Long-term averages of winter average temperature from 1981 to 2010."
   }
 ]
