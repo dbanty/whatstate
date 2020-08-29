@@ -1,6 +1,7 @@
 import sources from "./json/sources.json";
 
 export enum DataType {
+  INTEGER = "integer",
   PERCENT = "percent",
   NUMBER = "number",
   MONEY = "money",
@@ -30,9 +31,9 @@ export function loadDataSource(
  * @param value The number to be formatted.
  * @param min The minimum number of desired decimals.
  */
-export function numToString(value: number, min = 0): string {
+export function numToString(value: number, min = 0, max = 2): string {
   return value.toLocaleString(undefined, {
     minimumFractionDigits: min,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: max,
   });
 }

@@ -35,6 +35,8 @@ export default function Attribute(props: AttrProps): JSX.Element | null {
         return `$${numToString(value as number, 2)}`;
       case DataType.NUMBER:
         return numToString(value as number);
+      case DataType.INTEGER:
+        return numToString(value as number, 0, 0);
       default:
         return "";
     }
